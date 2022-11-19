@@ -1,34 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    public Attacks attacks;
+    public Attack AttackValue;
+    public CardPlayer player;
     public Transform atkPosRef;
-    public Player player;
+    public Vector2 originalPosition;
+    Vector2 originalScale;
+    Color originalColor;
 
-    Vector2 startPosition;
+    bool isClickable = true;
 
-    public void OnClick()
+
+    private void Start()
     {
-        player.SetAttack(attacks);
+        originalPosition = this.transform.position;
+        originalScale = this.transform.localScale;
+        originalColor = GetComponent<Image>().color;
+    }
+    public void Onclick()
+    {
+        if (isClickable)
+            player.SetChoosenCard(this);
     }
 
-    private void Start() {
-        startPosition = this.transform.position;
+    internal void Reset()
+    {
+        transform.position = originalPosition;
+        transform.localScale = originalScale;
+        GetComponent<Image>().color = originalColor;
+    }
+    internal void AnimateAttack()
+    {
+        transform.DOMove(atkPosRef.position, 1);
     }
 
-    float timer = 0;
-
-    private void Update() {
-        if(timer <= 1)
-        {
-            timer += 1;
-        }
-        else
-        {
-            
-        }
+    public void setClickable(bool value)
+    {
+        isClickable = value;
     }
+
 }
